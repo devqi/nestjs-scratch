@@ -7,22 +7,24 @@ export class ProductsController {
 
   @Post()
   @Header('Content-Type', 'application/json')
-  addProduct(
+  async addProduct(
     @Body('name') name: string,
     @Body('description') description: string,
     @Body('price') price: number,
   ) {
-    const productId = this.productsService.addProduct(name, description, price);
+    const productId = await this.productsService.addProduct(name, description, price);
     return { id: productId };
   }
 
   @Get()
-  getAllProducts() {
-    return this.productsService.getProducts();
+  async getAllProducts() {
+    const products = await this.productsService.getProducts();
+    return products;
   }
 
   @Get(':id')
-  getProduct(@Param('id') id: number) {
-    return this.productsService.getProductById(+id);
+  async getProduct(@Param('id') id: string) {
+    const product = await this.productsService.getProductById(id);
+    return product;
   }
 }
