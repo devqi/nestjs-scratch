@@ -5,8 +5,6 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class ProductsService {
-  private products: Product[] = [];
-
   constructor(
     @InjectModel('Product') private readonly productModel: Model<Product>,
   ) {}
@@ -30,6 +28,30 @@ export class ProductsService {
     }
 
     return this.toModel(product) as Product;
+  }
+
+  async updateProduct(
+    id: string,
+    name: string,
+    description: string,
+    price: number,
+  ) {
+    const productUpdateInfo = {} as Product;
+    if (name) {
+      productUpdateInfo.name = name;
+    }
+    if (description) {
+      productUpdateInfo.description = description;
+    }
+    if (price) {
+      productUpdateInfo.price = price;
+    }
+
+    await this.productModel.findByIdAndUpdate(id, productUpdateInfo);
+  }
+
+  async deleteProduct(id: string) {
+    await this.productModel.findByIdAndDelete(id);
   }
 
   private toModel(product: Product) {
